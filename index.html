@@ -10,7 +10,7 @@
   <meta http-equiv="Expires" content="0" />
   <title>Travel League Live</title>
   <link rel="manifest" href="manifest.webmanifest?v=3.0.0" />
-  <link rel="stylesheet" href="styles.css?v=3.0.0" />
+  <link rel="stylesheet" href="styles.css?v=7.0.0" />
 </head>
 <body>
   <header class="topbar">
@@ -18,7 +18,7 @@
       <span class="eyebrow">TRAVEL LEAGUE</span>
       <strong>Live Scoring</strong>
     </button>
-    <span class="version-badge">v3</span>
+    <span class="version-badge">v7</span>
   </header>
 
   <div id="connectionBanner" class="connection-banner" role="status">Starting app…</div>
@@ -108,8 +108,8 @@
 
         <div class="form-grid two-column">
           <div>
-            <label for="scorePlayer">Player</label>
-            <select id="scorePlayer"></select>
+            <label for="scoreGroup">Group</label>
+            <select id="scoreGroup"></select>
           </div>
           <div>
             <label for="scoreHole">Hole</label>
@@ -118,22 +118,15 @@
         </div>
 
         <div id="holeInfo" class="hole-info">Hole 1</div>
+        <p class="group-score-help">Tap each golfer’s score. Every tap saves instantly. When everyone in the group has a score, use <b>Next Hole</b>.</p>
 
-        <div class="quick-score-label">Tap the golfer’s score — it saves automatically</div>
-        <div id="quickScorePad" class="quick-score-pad" aria-label="Quick score buttons">
-          <button type="button" data-score="1">1</button><button type="button" data-score="2">2</button>
-          <button type="button" data-score="3">3</button><button type="button" data-score="4">4</button>
-          <button type="button" data-score="5">5</button><button type="button" data-score="6">6</button>
-          <button type="button" data-score="7">7</button><button type="button" data-score="8">8</button>
-          <button type="button" data-score="9">9</button><button type="button" data-score="10">10</button>
-          <button type="button" data-score="11">11</button><button type="button" data-score="12">12</button>
+        <div id="groupScoreGrid" class="group-score-grid"></div>
+
+        <div class="group-hole-actions">
+          <button id="previousGroupHole" class="secondary" type="button">← Previous Hole</button>
+          <button id="nextGroupHole" class="primary" type="button">Next Hole →</button>
         </div>
-
-        <div id="scoreSaveStatus" class="score-save-status" aria-live="polite">Choose a score from 1–12</div>
-        <div id="netPreview" class="net-preview hidden"></div>
-
-        <h3 class="section-subheading">Scorecard</h3>
-        <div id="scorecard" class="scorecard"></div>
+        <div id="scoreSaveStatus" class="score-save-status" aria-live="polite">Select a group to begin</div>
       </article>
 
       <article id="playersTab" class="card tab-panel hidden">
@@ -152,6 +145,14 @@
           <div>
             <label for="newPlayerHandicap">Course handicap</label>
             <input id="newPlayerHandicap" type="number" min="-10" max="54" step="1" value="0" inputmode="numeric" />
+          </div>
+          <div>
+            <label for="newPlayerGroup">Group</label>
+            <select id="newPlayerGroup">
+              <option value="1">Group 1</option><option value="2">Group 2</option>
+              <option value="3">Group 3</option><option value="4">Group 4</option>
+              <option value="5">Group 5</option><option value="6">Group 6</option>
+            </select>
           </div>
         </div>
         <button id="addPlayer" class="primary full-width" type="button">Add Player</button>
@@ -276,7 +277,7 @@
     <div class="noscript">JavaScript must be enabled to use Travel League Live.</div>
   </noscript>
 
-  <script src="firebase-config.js?v=3.0.0"></script>
-  <script src="app.js?v=3.0.0" defer></script>
+  <script src="firebase-config.js?v=7.0.0"></script>
+  <script src="app-v7.js?v=7.0.0" defer></script>
 </body>
 </html>
