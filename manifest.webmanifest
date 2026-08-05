@@ -1,0 +1,10 @@
+{
+  "name": "Travel League Live",
+  "short_name": "Golf Live",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f2e8",
+  "theme_color": "#12372a",
+  "description": "Live golf scoring and leaderboard for travel league tournaments.",
+  "icons": []
+}

@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Easy league setup. Anyone with the link can read and edit.
+    // Upgrade to authenticated rules before using for a public or paid league.
+    match /tournaments/{tournamentId} {
+      allow read, write: if true;
+      match /{document=**} {
+        allow read, write: if true;
+      }
+    }
+  }
+}
