@@ -125,8 +125,18 @@
           <button id="increaseScore" type="button" aria-label="Increase score">+</button>
         </div>
 
+        <div class="quick-score-label">Tap a score to save and move to the next hole</div>
+        <div id="quickScorePad" class="quick-score-pad" aria-label="Quick score buttons">
+          <button type="button" data-score="1">1</button><button type="button" data-score="2">2</button>
+          <button type="button" data-score="3">3</button><button type="button" data-score="4">4</button>
+          <button type="button" data-score="5">5</button><button type="button" data-score="6">6</button>
+          <button type="button" data-score="7">7</button><button type="button" data-score="8">8</button>
+          <button type="button" data-score="9">9</button><button type="button" data-score="10">10</button>
+          <button type="button" data-score="11">11</button><button type="button" data-score="12">12</button>
+        </div>
+
         <div id="netPreview" class="net-preview hidden"></div>
-        <button id="saveScore" class="primary big full-width" type="button">Save & Next Hole</button>
+        <button id="saveScore" class="secondary full-width" type="button">Save Current Score</button>
 
         <h3 class="section-subheading">Scorecard</h3>
         <div id="scorecard" class="scorecard"></div>

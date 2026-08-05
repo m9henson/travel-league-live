@@ -315,6 +315,39 @@ input:focus, select:focus, textarea:focus { border-color: var(--green-700); box-
   font-size: 3rem;
   font-weight: 950;
 }
+.quick-score-label {
+  margin: 4px 0 10px;
+  color: var(--muted);
+  text-align: center;
+  font-size: .82rem;
+  font-weight: 800;
+}
+.quick-score-pad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 16px;
+}
+.quick-score-pad button {
+  min-height: 58px;
+  border: 2px solid var(--green-100);
+  border-radius: 16px;
+  background: white;
+  color: var(--green-900);
+  font-size: 1.35rem;
+  font-weight: 950;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.quick-score-pad button:active { transform: scale(.97); }
+.quick-score-pad button.selected {
+  border-color: var(--green-700);
+  background: var(--green-800);
+  color: white;
+  box-shadow: 0 7px 18px rgba(21,63,46,.22);
+}
+.quick-score-pad.saving { pointer-events: none; opacity: .65; }
+
 .net-preview {
   margin: 0 0 14px;
   padding: 13px;
