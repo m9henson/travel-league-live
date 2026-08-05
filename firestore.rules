@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function claim() { return get(/databases/$(database)/documents/accessClaims/$(request.auth.uid)).data; }
+    function isOwner(tid) { return signedIn() && get(/databases/$(database)/documents/tournaments/$(tid)).data.ownerUid == request.auth.uid; }
+    function isAdmin(tid) { return isOwner(tid) || (signedIn() && claim().tournamentId == tid && claim().role == 'admin'); }
+    function groupNumber(tid) { return claim().tournamentId == tid && claim().role == 'group' ? claim().group : 0; }
+
+    match /publicConfig/{doc} { allow read: if true; allow write: if signedIn() && request.resource.data.tournamentId is string && isAdmin(request.resource.data.tournamentId); }
+    match /accessLinks/{token} {
+      allow get: if signedIn(); allow list: if false;
+      allow create, update, delete: if signedIn() && isAdmin(request.resource.data.tournamentId);
+    }
+    match /accessClaims/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.uid == uid
+        && exists(/databases/$(database)/documents/accessLinks/$(request.resource.data.token))
+        && get(/databases/$(database)/documents/accessLinks/$(request.resource.data.token)).data.active == true
+        && request.resource.data.tournamentId == get(/databases/$(database)/documents/accessLinks/$(request.resource.data.token)).data.tournamentId
+        && request.resource.data.role == get(/databases/$(database)/documents/accessLinks/$(request.resource.data.token)).data.role
+        && request.resource.data.group == get(/databases/$(database)/documents/accessLinks/$(request.resource.data.token)).data.group;
+      allow delete: if signedIn() && request.auth.uid == uid;
+    }
+    match /tournaments/{tid} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.ownerUid == request.auth.uid;
+      allow update, delete: if isAdmin(tid)
+        || (signedIn() && !('ownerUid' in resource.data) && request.resource.data.ownerUid == request.auth.uid);
+      match /players/{pid} {
+        allow read: if true; allow write: if isAdmin(tid);
+      }
+      match /scores/{sid} {
+        allow read: if true;
+        allow create, update: if isAdmin(tid) || (signedIn()
+          && groupNumber(tid) > 0
+          && request.resource.data.playerId is string
+          && get(/databases/$(database)/documents/tournaments/$(tid)/players/$(request.resource.data.playerId)).data.group == groupNumber(tid));
+        allow delete: if isAdmin(tid);
+      }
+      match /privateLinks/{key} { allow read, write: if isAdmin(tid); }
+    }
+  }
+}
