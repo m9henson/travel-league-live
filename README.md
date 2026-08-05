@@ -1,59 +1,24 @@
-# Travel League Live
+# Travel League Live v2
 
-A mobile-first live golf scoring app designed for travel league tournaments.
+Mobile-first live golf scoring for GitHub Pages and Firebase Firestore.
 
 ## Features
+- Gross scoring or handicap/net scoring per tournament
+- 9- or 18-hole events
+- Course handicap and adjustable handicap allowance
+- Hole-by-hole par and stroke-index setup
+- Live leaderboard across phones
+- Fast score entry, corrections, and shareable tournament links
 
-- Create 9-hole or 18-hole tournaments
-- Add players and handicaps
-- Enter scores one hole at a time
-- Live leaderboard updates across every connected phone
-- Share a direct tournament link
-- Installable on iPhone/Android as a web app
-- Custom course name, date, hole count, and pars
+## Update an existing GitHub Pages site
+1. Extract this ZIP.
+2. In the existing GitHub repository, upload and replace `index.html`, `app.js`, `styles.css`, and `service-worker.js`.
+3. Keep your current `firebase-config.js` if it already contains your Firebase config. If it is blank, the Firebase config previously saved in the browser will still work.
+4. Commit the files and wait one or two minutes for GitHub Pages.
+5. On iPhone, reload the page. If the old version remains, close the tab and reopen it, or clear Safari website data for the site.
 
-## 1. Create the GitHub repository
+## Firestore rules
+For initial private testing, deploy the included `firestore.rules`. They allow public read/write access. Before broad public use, add Firebase Authentication and tighter rules.
 
-1. Sign in to GitHub.
-2. Create a new public repository named `travel-league-live`.
-3. Upload every file in this project to the repository root.
-4. Commit the files.
-
-## 2. Create the free Firebase database
-
-1. Go to Firebase Console and create a project.
-2. Add a **Web App** to the project.
-3. Copy the Firebase configuration object.
-4. Open `firebase-config.js` and replace `null` with the copied configuration object.
-5. In Firebase, open **Firestore Database** and create the database.
-6. Open Firestore **Rules**, replace the rules with the contents of `firestore.rules`, and publish them.
-
-Example:
-
-```js
-export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
-};
-```
-
-## 3. Turn on GitHub Pages
-
-1. In the repository, open **Settings** → **Pages**.
-2. Under **Build and deployment**, select **Deploy from a branch**.
-3. Select the `main` branch and `/ (root)` folder.
-4. Save.
-5. GitHub will provide a live address similar to:
-   `https://YOUR-USERNAME.github.io/travel-league-live/`
-
-## iPhone installation
-
-Open the live site in Safari, tap **Share**, then **Add to Home Screen**.
-
-## Important security note
-
-The included Firestore rules are intentionally open so setup is simple for a casual league. Anyone with the site link can edit scores. For a public or paid league, add Firebase Authentication and administrator/scorer permissions.
+## Handicap method
+Enter each player's **course handicap**. The app applies the selected allowance, rounds to a playing handicap, then distributes strokes using each hole's stroke index. For a 9-hole event, enter the appropriate 9-hole course handicap.

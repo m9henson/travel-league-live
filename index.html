@@ -3,166 +3,134 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#12372a" />
-  <meta name="description" content="Live golf scoring and leaderboard for travel league tournaments." />
+  <meta name="theme-color" content="#0d261d" />
+  <meta name="description" content="Live gross and handicap golf scoring for travel league tournaments." />
   <title>Travel League Live</title>
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2.1" />
 </head>
 <body>
   <header class="topbar">
-    <div>
-      <p class="eyebrow">TRAVEL LEAGUE</p>
-      <h1>Live Scoring</h1>
-    </div>
+    <button id="homeLogo" class="brand-button" aria-label="Go home">
+      <span class="eyebrow">TRAVEL LEAGUE</span>
+      <strong>Live Scoring</strong>
+    </button>
     <button id="installBtn" class="ghost hidden">Install</button>
   </header>
 
   <main class="shell">
     <section id="setupPanel" class="card setup-card hidden">
       <h2>Connect Firebase</h2>
-      <p>This app needs a free Firebase Firestore database so scores sync across phones.</p>
-      <label>Firebase web configuration JSON</label>
-      <textarea id="firebaseConfigInput" rows="8" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
+      <p>Paste your Firebase web configuration as valid JSON.</p>
+      <label for="firebaseConfigInput">Firebase web configuration JSON</label>
+      <textarea id="firebaseConfigInput" rows="9" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
       <div class="row">
         <button id="saveConfigBtn" class="primary">Save & Connect</button>
         <button id="clearConfigBtn" class="secondary">Clear</button>
       </div>
-      <p class="fine">The configuration is stored only in this browser. For permanent deployment, add it to <code>firebase-config.js</code>.</p>
+      <p class="fine">The configuration stays in this browser unless you add it to <code>firebase-config.js</code>.</p>
     </section>
 
     <section id="homePanel" class="stack hidden">
       <div class="hero card">
         <div>
           <p class="eyebrow">LIVE TOURNAMENTS</p>
-          <h2>Track every shot.<br/>See every move.</h2>
+          <h1>Score the round.<br>Watch the leaderboard.</h1>
         </div>
-        <button id="newTournamentBtn" class="primary">+ New Tournament</button>
+        <button id="newTournamentBtn" class="primary big">+ New Tournament</button>
       </div>
-
       <div class="card">
-        <div class="section-head">
-          <h3>Your tournaments</h3>
-          <button id="refreshBtn" class="icon-btn" aria-label="Refresh">↻</button>
-        </div>
+        <div class="section-head"><h2>Tournaments</h2><button id="refreshBtn" class="icon-btn" aria-label="Refresh">↻</button></div>
         <div id="tournamentList" class="list"></div>
       </div>
     </section>
 
     <section id="tournamentPanel" class="stack hidden">
       <div class="card tournament-head">
-        <button id="backBtn" class="ghost">← Back</button>
-        <div>
-          <p id="tournamentMeta" class="eyebrow"></p>
-          <h2 id="tournamentName"></h2>
-        </div>
-        <button id="shareBtn" class="secondary">Share</button>
+        <button id="backBtn" class="secondary compact">← Tournaments</button>
+        <div class="title-wrap"><p id="tournamentMeta" class="eyebrow"></p><h1 id="tournamentName"></h1></div>
+        <button id="shareBtn" class="secondary compact">Share</button>
       </div>
 
       <nav class="tabs card" aria-label="Tournament views">
         <button class="tab active" data-tab="leaderboard">Leaderboard</button>
-        <button class="tab" data-tab="score">Enter Scores</button>
+        <button class="tab" data-tab="score">Score</button>
         <button class="tab" data-tab="players">Players</button>
         <button class="tab" data-tab="settings">Settings</button>
       </nav>
 
       <section id="leaderboardTab" class="card tab-panel">
-        <div class="section-head">
-          <h3>Leaderboard</h3>
-          <span id="liveBadge" class="live-badge">● LIVE</span>
-        </div>
+        <div class="section-head"><div><h2>Leaderboard</h2><p id="scoringLabel" class="subtext"></p></div><span class="live-badge">● LIVE</span></div>
+        <div class="leader-head"><span>Pos</span><span>Player</span><span>Thru</span><span id="scoreColumnLabel">Score</span></div>
         <div id="leaderboard" class="leaderboard"></div>
       </section>
 
       <section id="scoreTab" class="card tab-panel hidden">
         <div class="form-grid">
-          <div>
-            <label for="scorePlayer">Player</label>
-            <select id="scorePlayer"></select>
-          </div>
-          <div>
-            <label for="scoreHole">Hole</label>
-            <select id="scoreHole"></select>
-          </div>
+          <div><label for="scorePlayer">Player</label><select id="scorePlayer"></select></div>
+          <div><label for="scoreHole">Hole</label><select id="scoreHole"></select></div>
         </div>
         <div id="holeInfo" class="hole-info"></div>
         <div class="score-stepper">
-          <button id="scoreMinus" aria-label="Decrease score">−</button>
+          <button id="scoreMinus" type="button" aria-label="Decrease score">−</button>
           <output id="scoreValue">4</output>
-          <button id="scorePlus" aria-label="Increase score">+</button>
+          <button id="scorePlus" type="button" aria-label="Increase score">+</button>
         </div>
-        <button id="saveScoreBtn" class="primary full">Save Score</button>
+        <div id="netHolePreview" class="net-preview hidden"></div>
+        <button id="saveScoreBtn" class="primary full big">Save & Next Hole</button>
         <div id="scoreHistory" class="score-history"></div>
       </section>
 
       <section id="playersTab" class="card tab-panel hidden">
+        <h2>Add Players</h2>
         <div class="form-grid player-form">
-          <div>
-            <label for="playerNameInput">Player name</label>
-            <input id="playerNameInput" placeholder="e.g. Matt Henson" />
-          </div>
-          <div>
-            <label for="playerHandicapInput">Handicap</label>
-            <input id="playerHandicapInput" type="number" min="0" max="54" step="0.1" value="0" />
-          </div>
+          <div><label for="playerNameInput">Player name</label><input id="playerNameInput" placeholder="e.g. Matt Henson" /></div>
+          <div><label for="playerHandicapInput">Course handicap</label><input id="playerHandicapInput" type="number" min="-10" max="54" step="1" value="0" /></div>
         </div>
         <button id="addPlayerBtn" class="primary full">Add Player</button>
         <div id="playerList" class="list"></div>
       </section>
 
       <section id="settingsTab" class="card tab-panel hidden">
+        <h2>Tournament Settings</h2>
         <div class="form-grid">
-          <div>
-            <label for="editTournamentName">Tournament name</label>
-            <input id="editTournamentName" />
-          </div>
-          <div>
-            <label for="editCourseName">Course</label>
-            <input id="editCourseName" />
-          </div>
-          <div>
-            <label for="editTournamentDate">Date</label>
-            <input id="editTournamentDate" type="date" />
-          </div>
-          <div>
-            <label for="editHoles">Holes</label>
-            <select id="editHoles"><option value="9">9</option><option value="18">18</option></select>
-          </div>
+          <div><label for="editTournamentName">Tournament name</label><input id="editTournamentName" /></div>
+          <div><label for="editCourseName">Course</label><input id="editCourseName" /></div>
+          <div><label for="editTournamentDate">Date</label><input id="editTournamentDate" type="date" /></div>
+          <div><label for="editHoles">Holes</label><select id="editHoles"><option value="9">9</option><option value="18">18</option></select></div>
+          <div><label for="editScoringMode">Scoring</label><select id="editScoringMode"><option value="gross">Gross scoring</option><option value="handicap">Handicap / net scoring</option></select></div>
+          <div><label for="editHandicapAllowance">Handicap allowance</label><select id="editHandicapAllowance"><option value="1">100%</option><option value="0.95">95%</option><option value="0.9">90%</option><option value="0.85">85%</option></select></div>
         </div>
-        <label>Hole pars</label>
-        <div id="parGrid" class="par-grid"></div>
+        <div class="section-head settings-section"><div><h3>Hole setup</h3><p class="subtext">Par and stroke index determine net scores.</p></div></div>
+        <div id="holeSettings" class="hole-settings"></div>
         <button id="saveSettingsBtn" class="primary full">Save Settings</button>
         <button id="deleteTournamentBtn" class="danger full">Delete Tournament</button>
       </section>
+    </section>
+
+    <section id="errorPanel" class="card hidden">
+      <h2>Something went wrong</h2>
+      <p id="errorMessage"></p>
+      <button id="recoverBtn" class="primary">Return to tournaments</button>
     </section>
   </main>
 
   <dialog id="newTournamentDialog">
     <form method="dialog" class="dialog-card">
-      <div class="section-head">
-        <h2>New Tournament</h2>
-        <button value="cancel" class="icon-btn" aria-label="Close">✕</button>
-      </div>
-      <label for="newTournamentName">Tournament name</label>
-      <input id="newTournamentName" placeholder="Ozarks Travel League" required />
-      <label for="newCourseName">Course</label>
-      <input id="newCourseName" placeholder="Silo Ridge" required />
+      <div class="section-head"><h2>New Tournament</h2><button value="cancel" class="icon-btn" aria-label="Close">✕</button></div>
+      <label for="newTournamentName">Tournament name</label><input id="newTournamentName" placeholder="Ozarks Travel League" required />
+      <label for="newCourseName">Course</label><input id="newCourseName" placeholder="Silo Ridge" required />
       <div class="form-grid">
-        <div>
-          <label for="newTournamentDate">Date</label>
-          <input id="newTournamentDate" type="date" required />
-        </div>
-        <div>
-          <label for="newHoles">Holes</label>
-          <select id="newHoles"><option value="18">18</option><option value="9">9</option></select>
-        </div>
+        <div><label for="newTournamentDate">Date</label><input id="newTournamentDate" type="date" required /></div>
+        <div><label for="newHoles">Holes</label><select id="newHoles"><option value="18">18</option><option value="9">9</option></select></div>
+        <div><label for="newScoringMode">Scoring</label><select id="newScoringMode"><option value="gross">Gross scoring</option><option value="handicap">Handicap / net scoring</option></select></div>
+        <div><label for="newHandicapAllowance">Handicap allowance</label><select id="newHandicapAllowance"><option value="1">100%</option><option value="0.95">95%</option><option value="0.9">90%</option><option value="0.85">85%</option></select></div>
       </div>
-      <button id="createTournamentBtn" value="default" class="primary full">Create Tournament</button>
+      <button id="createTournamentBtn" value="default" class="primary full big">Create Tournament</button>
     </form>
   </dialog>
 
   <div id="toast" class="toast hidden" role="status"></div>
-
-  <script type="module" src="app.js"></script>
+  <script type="module" src="app.js?v=2.1"></script>
 </body>
 </html>
