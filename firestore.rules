@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Simple league setup: anyone with the site link can read and enter scores.
+    // Add Firebase Authentication later if you want admin-only editing.
+    match /tournaments/{tournamentId} {
+      allow read, write: if true;
+      match /{document=**} {
+        allow read, write: if true;
+      }
+    }
+  }
+}
