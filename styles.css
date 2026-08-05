@@ -473,3 +473,52 @@ input:focus, select:focus, textarea:focus { border-color: var(--green-700); box-
   .leaderboard-header, .leaderboard-row { grid-template-columns: 38px minmax(0, 1fr) 44px 58px; }
   .leaderboard-row { padding-left: 2px; padding-right: 2px; }
 }
+
+
+/* v5 simplified one-tap score entry */
+.score-stepper { display: none !important; }
+.quick-score-label {
+  margin: 10px 0 14px;
+  color: var(--green-900);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+.quick-score-pad {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.quick-score-pad button {
+  min-height: 68px;
+  border: 2px solid var(--green-100);
+  border-radius: 18px;
+  background: #fff;
+  color: var(--green-900);
+  font-size: 1.65rem;
+  font-weight: 950;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.quick-score-pad button:active,
+.quick-score-pad button.selected {
+  border-color: var(--green-800);
+  background: var(--green-800);
+  color: #fff;
+  transform: scale(.97);
+}
+.quick-score-pad.saving button:not(.selected) { opacity: .5; }
+.score-save-status {
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #edf3ef;
+  color: var(--green-900);
+  text-align: center;
+  font-weight: 850;
+}

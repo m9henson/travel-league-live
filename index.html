@@ -119,13 +119,7 @@
 
         <div id="holeInfo" class="hole-info">Hole 1</div>
 
-        <div class="score-stepper" aria-label="Gross score selector">
-          <button id="decreaseScore" type="button" aria-label="Decrease score">−</button>
-          <output id="scoreValue" aria-live="polite">4</output>
-          <button id="increaseScore" type="button" aria-label="Increase score">+</button>
-        </div>
-
-        <div class="quick-score-label">Tap a score to save and move to the next hole</div>
+        <div class="quick-score-label">Tap the golfer’s score — it saves automatically</div>
         <div id="quickScorePad" class="quick-score-pad" aria-label="Quick score buttons">
           <button type="button" data-score="1">1</button><button type="button" data-score="2">2</button>
           <button type="button" data-score="3">3</button><button type="button" data-score="4">4</button>
@@ -135,8 +129,8 @@
           <button type="button" data-score="11">11</button><button type="button" data-score="12">12</button>
         </div>
 
+        <div id="scoreSaveStatus" class="score-save-status" aria-live="polite">Choose a score from 1–12</div>
         <div id="netPreview" class="net-preview hidden"></div>
-        <button id="saveScore" class="secondary full-width" type="button">Save Current Score</button>
 
         <h3 class="section-subheading">Scorecard</h3>
         <div id="scorecard" class="scorecard"></div>

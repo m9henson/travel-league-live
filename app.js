@@ -361,13 +361,11 @@
 
     $('scorePlayer').addEventListener('change', loadScoreEditor);
     $('scoreHole').addEventListener('change', loadScoreEditor);
-    $('decreaseScore').addEventListener('click', () => adjustScore(-1));
-    $('increaseScore').addEventListener('click', () => adjustScore(1));
-    $('saveScore').addEventListener('click', () => saveScore(false));
-    $('quickScorePad').addEventListener('click', (event) => {
-      const button = event.target.closest('[data-score]');
-      if (!button || state.savingScore) return;
-      selectQuickScore(Number(button.dataset.score));
+    document.querySelectorAll('#quickScorePad [data-score]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        if (state.savingScore) return;
+        await selectQuickScore(Number(button.dataset.score));
+      });
     });
     $('addPlayer').addEventListener('click', addPlayer);
     $('newPlayerName').addEventListener('keydown', (event) => {
@@ -684,21 +682,14 @@
     const hole = Math.max(1, Math.min(state.tournament.holes, Number($('scoreHole').value || 1)));
     const existing = state.scores.find((score) => score.playerId === playerId && score.hole === hole);
     state.currentScore = existing?.gross || Number(state.tournament.pars[hole - 1] || 4);
-    $('scoreValue').textContent = String(state.currentScore);
     updateQuickScoreSelection();
+    $('scoreSaveStatus').textContent = existing ? `Current score: ${existing.gross} — tap another number to change it` : 'Choose a score from 1–12';
 
     const par = Number(state.tournament.pars[hole - 1] || 4);
     const strokeIndex = Number(state.tournament.strokeIndexes[hole - 1] || hole);
     $('holeInfo').textContent = `Hole ${hole} • Par ${par} • Stroke index ${strokeIndex}`;
     updateNetPreview();
     renderScorecard();
-  }
-
-  function adjustScore(change) {
-    state.currentScore = Math.max(1, Math.min(20, state.currentScore + change));
-    $('scoreValue').textContent = String(state.currentScore);
-    updateQuickScoreSelection();
-    updateNetPreview();
   }
 
   function updateQuickScoreSelection() {
@@ -709,8 +700,8 @@
 
   async function selectQuickScore(score) {
     state.currentScore = Math.max(1, Math.min(12, score));
-    $('scoreValue').textContent = String(state.currentScore);
     updateQuickScoreSelection();
+    $('scoreSaveStatus').textContent = `Saving ${state.currentScore}…`;
     updateNetPreview();
     await saveScore(true);
   }
@@ -776,10 +767,9 @@
 
     if (state.savingScore) return;
     state.savingScore = true;
-    const button = $('saveScore');
     const pad = $('quickScorePad');
-    button.disabled = true;
     pad.classList.add('saving');
+    pad.querySelectorAll('button').forEach((item) => { item.disabled = true; });
     try {
       await state.store.set(`tournaments/${state.tournamentId}/scores/${playerId}_${hole}`, {
         playerId,
@@ -788,7 +778,8 @@
         updatedAt: Date.now()
       });
       await refreshTournamentData(false);
-      toast(fromQuickPad ? `${state.currentScore} saved for hole ${hole}` : `Hole ${hole} saved`);
+      $('scoreSaveStatus').textContent = `${state.currentScore} saved for Hole ${hole}`;
+      toast(`${state.currentScore} saved for hole ${hole}`);
       if (hole < state.tournament.holes) {
         $('scoreHole').value = String(hole + 1);
         loadScoreEditor();
@@ -797,7 +788,7 @@
       showFatal(error, 'The score could not be saved.');
     } finally {
       state.savingScore = false;
-      button.disabled = false;
+      pad.querySelectorAll('button').forEach((item) => { item.disabled = false; });
       pad.classList.remove('saving');
     }
   }
