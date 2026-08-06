@@ -1,0 +1,9 @@
+{
+  "name": "Ozark Travel Stein League",
+  "short_name": "Stein League",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f1e7",
+  "theme_color": "#0b3428",
+  "icons": []
+}

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b3428"><title>Ozark Travel Stein League</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css">
+</head><body>
+<header><div><small>OZARK TRAVEL STEIN LEAGUE</small><h1>Live Scoring</h1></div><b>1.1</b></header>
+<div id="status">Starting…</div>
+<main>
+<section id="login" class="card hidden"><h2>Administrator Login</h2><p>Sign in with your league username and password.</p><label>Username<input id="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="m9henson"></label><label>Password<input id="password" type="password" autocomplete="current-password"></label><button id="loginBtn">Sign In</button><button id="spectatorBtn" class="secondary">Open Spectator Leaderboard</button></section>
+<section id="home" class="hidden"><div class="card"><div class="row"><h2>Tournaments</h2><button id="newBtn">+ New</button></div><div id="tournaments"></div></div></section>
+<section id="create" class="card hidden"><h2>New Tournament</h2><div class="grid"><label>Name<input id="newName" value="Ozark Travel Stein League"></label><label>Course<input id="newCourse"></label><label>Date<input id="newDate" type="date"></label><label>Holes<select id="newHoles"><option>18</option><option>9</option></select></label></div><button id="createBtn">Create Tournament</button><button data-back class="secondary">Cancel</button></section>
+<section id="event" class="hidden">
+<div class="card"><div class="row"><button id="backBtn" class="secondary">← Tournaments</button><span id="roleBadge"></span></div><h2 id="eventName"></h2><p id="eventMeta"></p></div>
+<nav class="card tabs"><button data-tab="leader">Leaderboard</button><button data-tab="score">Scores</button><button data-tab="skins">Skins</button><button data-tab="players">Players</button><button data-tab="setup">Setup</button></nav>
+<div id="leader" class="card pane"></div>
+<div id="score" class="card pane hidden"><div class="row"><select id="groupSelect"></select><select id="holeSelect"></select></div><div id="scoreGrid"></div><div class="row"><button id="prevHole" class="secondary">← Hole</button><button id="nextHole">Next Hole →</button></div></div>
+<div id="skins" class="card pane hidden"><h2>Skins</h2><div class="skincols"><div><h3>Handicap Skins</h3><div id="handicapSkins"></div></div><div><h3>Blind Skins</h3><div id="blindSkins"></div></div></div></div>
+<div id="players" class="card pane hidden"><h2>Players</h2><div class="grid"><label>Name<input id="playerName"></label><label>Course handicap<input id="playerHcp" type="number" value="0"></label><label>Group<select id="playerGroup"></select></label></div><button id="addPlayer">Add Player</button><div id="playerList"></div></div>
+<div id="setup" class="card pane hidden"><h2>Setup</h2><div class="grid"><label>Tournament name<input id="editName"></label><label>Course<input id="editCourse"></label><label>Date<input id="editDate" type="date"></label><label>Active for spectators<input id="activeEvent" type="checkbox"></label></div><h3>Skin Holes</h3><div id="holeSetup"></div><button id="saveSetup">Save Setup</button><hr><h3>Private Group Links</h3><button id="generateLinks">Generate New Links</button><div id="links"></div><hr><button id="clearScores" class="danger">Clear All Scores</button></div>
+</section>
+</main><div id="toast" class="toast hidden"></div><script type="module" src="app.js"></script></body></html>
