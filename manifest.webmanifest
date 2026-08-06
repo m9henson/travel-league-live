@@ -1,9 +1,0 @@
-{
-  "name": "Travel League Live",
-  "short_name": "Golf Scores",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#f4f1e8",
-  "theme_color": "#0c2a20",
-  "description": "Live individual gross and net golf scoring."
-}
